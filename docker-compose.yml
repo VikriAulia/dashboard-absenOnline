@@ -1,0 +1,43 @@
+services:
+  application:
+    container_name: absen-dashboard
+    image: node:lts-alpine
+    restart: always
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./code:/home/node/code
+    working_dir: /home/node/code-dashboard
+    command: npm run dev
+    # command: ["sh", "-c", "./start.sh"]
+    depends_on:
+      - backend
+    environment:
+      - HOST=0.0.0.0
+      - CHOKIDAR_USEPOLLING=true
+      - CHOKIDAR_INTERVAL=50
+      - WATCHPACK_POLLING=true
+    tty: true
+
+  backend:
+    container_name: absen-database
+    image: postgres:latest
+    restart: always
+    shm_size: 128mb
+    environment:
+      POSTGRES_USER: absenonline
+      POSTGRES_PASSWORD: P0sgr3sP4ssw0rd
+      POSTGRES_DB: DB_ABSEN_ONLINE
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - "8080:8080"
+
+volumes:
+  postgres_data:

@@ -7,8 +7,8 @@ set -e
 set -x
 
 # cleanup
-rm -rf node_modules/
-rm -rf .next/
+# rm -rf node_modules/
+# rm -rf .next/
 
 # Install dependencies
 npm install

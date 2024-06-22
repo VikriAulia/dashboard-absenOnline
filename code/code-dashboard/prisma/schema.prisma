@@ -1,0 +1,74 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model DashboardUser {
+  id              Int      @id @default(autoincrement())
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  email           String   @unique
+  password        String
+  role            UserRole @default(USER)
+  name            String?
+  organizedEvents Event[]  @relation("UserEvents")
+}
+
+model Event {
+  id          Int           @id @default(autoincrement())
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+  title       String        @db.VarChar(255)
+  description String?
+  date        DateTime
+  location    String       @db.VarChar(255)
+  qrCode      String       @db.VarChar(255)
+  organizerId Int
+  organizer   DashboardUser @relation(fields: [organizerId], references: [id], name: "UserEvents")
+  attendees   Attendance[]
+}
+
+model Student {
+  id         Int          @id @default(autoincrement())
+  createdAt  DateTime     @default(now())
+  updatedAt  DateTime     @updatedAt
+  name       String       @db.VarChar(255)
+  age        Int
+  email      String       @unique
+  class      String       @db.VarChar(255)
+  device_id  String       @db.VarChar(255)
+  attendance Attendance[]
+}
+
+model Attendance {
+  id        Int              @id @default(autoincrement())
+  date      DateTime         @default(now())
+  studentId Int
+  eventId   Int
+  status    AttendanceStatus @default(ABSENT)
+  student   Student          @relation(fields: [studentId], references: [id])
+  event     Event            @relation(fields: [eventId], references: [id])
+}
+
+enum UserRole {
+  ADMIN
+  TEACHER
+  USER
+}
+
+enum AttendanceStatus {
+  PRESENT
+  ABSENT
+  LATE
+  EXCUSED
+}

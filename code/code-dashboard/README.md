@@ -27,6 +27,8 @@ This is a starter template using the following stack:
 - Forms - [React Hook Form](https://ui.shadcn.com/docs/components/form)
 - Linting - [ESLint](https://eslint.org)
 - Formatting - [Prettier](https://prettier.io)
+- Database - [Postgresql](https://www.postgresql.org/docs/)
+- ORM - [Prisma](https://www.prisma.io/docs/)
 
 _If you are looking for a React admin dashboard starter, here is the [repo](https://github.com/Kiranism/react-shadcn-dashboard-starter)._
 
@@ -53,6 +55,7 @@ Follow these steps to clone the repository and start the development server:
 - Create a `.env.local` file by copying the example environment file:
   `cp env.example.txt .env.local`
 - Add the required environment variables to the `.env.local` file.
+- `npm run migrate`
 - `npm run dev`
 
 You should now be able to access the application at http://localhost:3000.

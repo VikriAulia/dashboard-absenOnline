@@ -1,10 +1,10 @@
 'use client';
 import { ColumnDef } from '@tanstack/react-table';
 import { CellAction } from './cell-action';
-import { User } from '@/constants/data';
+import { DashboardUser } from '@prisma/client';
 import { Checkbox } from '@/components/ui/checkbox';
 
-export const columns: ColumnDef<User>[] = [
+export const columns: ColumnDef<DashboardUser>[] = [
   {
     id: 'select',
     header: ({ table }) => (
@@ -29,19 +29,16 @@ export const columns: ColumnDef<User>[] = [
     header: 'NAME'
   },
   {
-    accessorKey: 'company',
-    header: 'COMPANY'
-  },
-  {
     accessorKey: 'role',
-    header: 'ROLE'
+    header: 'ROLE',
   },
   {
-    accessorKey: 'status',
-    header: 'STATUS'
+    accessorKey: 'email',
+    header: 'EMAIL'
   },
   {
     id: 'actions',
+    header: "ACTION",
     cell: ({ row }) => <CellAction data={row.original} />
   }
 ];

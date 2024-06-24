@@ -3,8 +3,11 @@ import { twMerge } from 'tailwind-merge';
 import { Active, DataRef, Over } from '@dnd-kit/core';
 import { ColumnDragData } from '@/components/kanban/board-column';
 import { TaskDragData } from '@/components/kanban/task-card';
+import { PrismaClient } from '@prisma/client';
 
 type DraggableData = ColumnDragData | TaskDragData;
+
+export const prisma = new PrismaClient();
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));

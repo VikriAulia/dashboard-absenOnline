@@ -8,13 +8,13 @@ import {
   DropdownMenuLabel,
   DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu';
-import { User } from '@/constants/data';
 import { Edit, MoreHorizontal, Trash } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
+import { DashboardUser } from '@prisma/client';
 
 interface CellActionProps {
-  data: User;
+  data: DashboardUser;
 }
 
 export const CellAction: React.FC<CellActionProps> = ({ data }) => {
@@ -22,7 +22,35 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
   const [open, setOpen] = useState(false);
   const router = useRouter();
 
-  const onConfirm = async () => {};
+  const onConfirm = async () => {
+    setLoading(true);
+    if (typeof data.id !== 'number') {
+      throw new Error('ID must be number');
+    }
+
+    try {
+      const response = await fetch(`/api/user/delete/${data.id}`, {
+        method: 'DELETE'
+      });
+
+      if (!response.ok) {
+        throw new Error(`Error: ${response.status}`);
+      }
+
+      const result = await response.json();
+      console.log(result.message);
+      // close dialog modal
+      setLoading(false);
+      setOpen(false);
+      // Reload the page to reflect changes
+      window.location.reload();
+    } catch (error) {
+      setLoading(false);
+      setOpen(false);
+      console.error(`Failed to delete user: ${error}`);
+      throw new Error(`Failed to delete user`);
+    }
+  };
 
   return (
     <>

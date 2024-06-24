@@ -1,9 +1,21 @@
 {
   "extends": "next/core-web-vitals",
-  "plugins": ["@typescript-eslint"],
+  "plugins": [
+    "@typescript-eslint"
+  ],
+  "settings": {
+    "import/resolver": {
+      "typescript": {} // this will load the alias settings from tsconfig.json
+    }
+  },
   "rules": {
-    "@typescript-eslint/no-unused-vars": ["warn", { "args": "none" }],
-    "import/no-unresolved": "error",
+    "@typescript-eslint/no-unused-vars": [
+      "warn",
+      {
+        "args": "none"
+      }
+    ],
+    "import/no-unresolved": "off",
     "import/named": "off",
     "no-console": "warn"
   }

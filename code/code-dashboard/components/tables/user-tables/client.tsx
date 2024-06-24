@@ -3,16 +3,16 @@ import { Button } from '@/components/ui/button';
 import { DataTable } from '@/components/ui/data-table';
 import { Heading } from '@/components/ui/heading';
 import { Separator } from '@/components/ui/separator';
-import { User } from '@/constants/data';
+import { DashboardUser } from '@prisma/client';
 import { Plus } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { columns } from './columns';
 
-interface ProductsClientProps {
-  data: User[];
+interface DashboardUserProps {
+  data: DashboardUser[];
 }
 
-export const UserClient: React.FC<ProductsClientProps> = ({ data }) => {
+export const UserClient: React.FC<DashboardUserProps> = ({ data }) => {
   const router = useRouter();
 
   return (

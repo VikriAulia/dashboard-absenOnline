@@ -33,7 +33,7 @@ export async function DELETE(
     }
 
     // Ensure is not admin, not allow to delete admin account
-    if (userId === 10) {
+    if (userId === 1) {
       return NextResponse.json(
         { message: `Delete admin account not allowed` },
         { status: 403 }
@@ -46,7 +46,7 @@ export async function DELETE(
         organizerId: userId
       },
       data: {
-        organizerId: 10 //admin ID
+        organizerId: 1 //admin ID
       }
     });
 

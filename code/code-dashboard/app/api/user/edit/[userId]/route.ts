@@ -4,6 +4,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from 'lib/utils'; // Adjust the import path to your Prisma instance
 import { userFormSchema } from '@/types';
 import { z } from 'zod';
+import bcrypt from 'bcrypt';
 
 export async function PATCH(
   req: Request,
@@ -18,24 +19,29 @@ export async function PATCH(
 
     // Parse and validate the request body
     const body = await req.json();
-    const parsedBody = userFormSchema.parse(body);
+    const parsedData = userFormSchema.parse(body);
+
+    // Conditionally hash the password if it's provided
+    let updateData: any = {
+      email: parsedData.email,
+      role: parsedData.role,
+      name: parsedData.name
+    };
+
+    if (parsedData.password) {
+      const hashedPassword = await bcrypt.hash(parsedData.password, 10);
+      updateData.password = hashedPassword;
+    }
 
     // Perform the update operation
-    const updatedUser = await prisma.dashboardUser.update({
-      where: {
-        id: userId
-      },
-      data: {
-        name: parsedBody.name,
-        email: parsedBody.email,
-        password: parsedBody.password,
-        role: parsedBody.role
-      }
+    await prisma.dashboardUser.update({
+      where: { id: userId },
+      data: updateData
     });
 
     // Send a success response
     return NextResponse.json(
-      { message: 'User update successfully', user: updatedUser },
+      { message: 'User update successfully', user: updateData },
       { status: 200 }
     );
   } catch (error: any) {

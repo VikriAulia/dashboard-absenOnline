@@ -33,7 +33,6 @@ export default async function Page({ params }: { params: { userId: string } }) {
           id: Id,
           email: userData?.email as string,
           name: userData?.name as string,
-          password: userData?.password as string,
           role: userData?.role || 'USER'
         };
       } else {

@@ -26,8 +26,9 @@ import {
 } from '@/components/ui/select';
 // import FileUpload from "@/components/FileUpload";
 import { useToast } from '../ui/use-toast';
-import { UserFormValues, userFormSchema } from '@/types';
+import { UserFormValuesTypes, userFormSchema } from '@/types';
 import axios from 'axios';
+import { AlertModal } from '../modal/alert-modal';
 
 interface UserFormProps {
   initialData: any | null;
@@ -52,22 +53,23 @@ export const UserForm: React.FC<UserFormProps> = ({ initialData, roles }) => {
   const defaultValues = initialData
     ? initialData
     : {
+        id: '',
         name: '',
         email: '',
         password: '',
         role: ''
       };
 
-  const form = useForm<UserFormValues>({
+  const form = useForm<UserFormValuesTypes>({
     resolver: zodResolver(userFormSchema),
     defaultValues
   });
 
-  const onSubmit = async (data: UserFormValues) => {
+  const onSubmit = async (data: UserFormValuesTypes) => {
     try {
       setLoading(true);
       if (initialData) {
-        // await axios.post(`/api/products/edit-product/${initialData._id}`, data);
+        await axios.post(`/api/user/edit/${initialData.id}`, data);
       } else {
         const res = await axios.post(`/api/user/create`, data);
         if (res.status !== 200) {
@@ -78,8 +80,8 @@ export const UserForm: React.FC<UserFormProps> = ({ initialData, roles }) => {
           });
         }
       }
-      router.refresh();
       router.push(`/dashboard/user`);
+      router.refresh();
       toast({
         variant: 'default',
         title: toastMessage
@@ -98,9 +100,9 @@ export const UserForm: React.FC<UserFormProps> = ({ initialData, roles }) => {
   const onDelete = async () => {
     try {
       setLoading(true);
-      //   await axios.delete(`/api/${params.storeId}/products/${params.productId}`);
+      await axios.delete(`/api/user/delete/${params.userId}`);
       router.refresh();
-      router.push(`/${params.storeId}/products`);
+      router.push(`/dashboard/user`);
     } catch (error: any) {
     } finally {
       setLoading(false);
@@ -110,12 +112,12 @@ export const UserForm: React.FC<UserFormProps> = ({ initialData, roles }) => {
 
   return (
     <>
-      {/* <AlertModal
+      <AlertModal
         isOpen={open}
         onClose={() => setOpen(false)}
         onConfirm={onDelete}
         loading={loading}
-      /> */}
+      />
       <div className="flex items-center justify-between">
         <Heading title={title} description={description} />
         {initialData && (

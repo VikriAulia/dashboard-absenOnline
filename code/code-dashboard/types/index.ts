@@ -37,10 +37,11 @@ export declare type DashboardUserType = DashboardUser;
 
 /* Disini defenisi scema untuk form */
 export const userFormSchema = z.object({
+  id: z.number(),
   email: z.string().email(),
   password: z.string().min(8),
   role: z.enum(['ADMIN', 'TEACHER', 'USER']),
   name: z.string().min(3)
 });
 
-export declare type UserFormValues = z.infer<typeof userFormSchema>;
+export declare type UserFormValuesTypes = z.infer<typeof userFormSchema>;

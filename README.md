@@ -1,4 +1,3 @@
-```markdown
 # Dashboard Absen Online
 
 Dashboard Absen Online is a web application built with Next.js for managing online attendance. This project uses Docker Compose for easy deployment and management.

@@ -119,31 +119,43 @@ export const navItems: NavItem[] = [
     label: 'Dashboard'
   },
   {
-    title: 'User',
+    title: 'Pengguna',
     href: '/dashboard/user',
     icon: 'user',
     label: 'user'
   },
   {
-    title: 'Employee',
-    href: '/dashboard/employee',
-    icon: 'employee',
-    label: 'employee'
+    title: 'Kegiatan',
+    href: '/dashboard/kegiatan',
+    icon: 'store',
+    label: 'event'
   },
   {
-    title: 'Profile',
+    title: 'Peserta Didik',
+    href: '/dashboard/employee',
+    icon: 'school',
+    label: 'school'
+  },
+  {
+    title: 'Kehadiran',
+    href: '/dashboard/attendance',
+    icon: 'attendance',
+    label: 'attendance'
+  },
+  {
+    title: '❌ Profile',
     href: '/dashboard/profile',
     icon: 'profile',
     label: 'profile'
   },
   {
-    title: 'Kanban',
+    title: '❌ Kanban',
     href: '/dashboard/kanban',
     icon: 'kanban',
     label: 'kanban'
   },
   {
-    title: 'Login',
+    title: '❌ Login',
     href: '/',
     icon: 'login',
     label: 'login'

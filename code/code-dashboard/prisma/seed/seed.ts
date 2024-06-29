@@ -13,13 +13,13 @@ const main = async () => {
   await seed.$resetDatabase();
 
   // Seed the database with 10 data each
-  await seed.student((x) => x(10));
-  await seed.dashboardUser((x) => x(10));
+  await seed.siswa((x) => x(10));
+  await seed.pengguna_dashboard((x) => x(10));
   // seed event and attendance
-  await seed.event((createMany) =>
+  await seed.kegiatan((createMany) =>
     createMany(10, {
       // buat 10 kehadiran untuk setiap acara
-      attendees: (createMany) => createMany(10)
+      kehadiran: (createMany) => createMany(50)
     })
   );
 

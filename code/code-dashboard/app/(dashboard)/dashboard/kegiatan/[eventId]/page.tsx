@@ -1,45 +1,52 @@
 import BreadCrumb from '@/components/breadcrumb';
-import { UserForm } from '@/components/forms/user-form';
+import { EventForm } from '@/components/forms/event-form';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { toast } from '@/components/ui/use-toast';
 
-import { UserFormValuesTypes } from '@/types';
+import { eventFormValuesTypes } from '@/types';
 import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
 
-export default async function Page({ params }: { params: { userId: string } }) {
+export default async function Page({
+  params
+}: {
+  params: { eventId: string };
+}) {
   const breadcrumbItems = [
-    { title: 'User', link: '/dashboard/user' },
-    { title: 'Create', link: '/dashboard/user/create' }
+    { title: 'User', link: '/dashboard/kegiatan' },
+    { title: 'Create', link: '/dashboard/kegiatan/create' }
   ];
 
-  let formData: UserFormValuesTypes | null = null;
+  let formData: eventFormValuesTypes | null = null;
   // Ensure userIdString is not null and convert it to a number
-  const Id = params.userId ? parseInt(params.userId, 10) : NaN;
-  console.log(`userId: ${params.userId}`);
+  const Id = params.eventId ? parseInt(params.eventId, 10) : NaN;
+  console.log(`userId: ${params.eventId}`);
   // const userId = 21;
 
   if (!isNaN(Id) && Id > 0) {
     try {
       console.log(`Id: ${Id}`);
-      const userData = await prisma.dashboardUser.findUnique({
+      const eventData = await prisma.kegiatan.findUnique({
         where: {
-          id: Id
+          id_kegiatan: Id
         }
       });
 
-      if (userData) {
+      if (eventData) {
         formData = {
-          id: Id,
-          email: userData?.email as string,
-          name: userData?.name as string,
-          role: userData?.role || 'USER'
+          id_kegiatan: Id,
+          judul: eventData?.judul as string,
+          waktu: eventData?.waktu,
+          kordinat_lokasi: eventData?.kordinat_lokasi,
+          qr_code: eventData?.qr_code as string,
+          deskripsi: eventData?.deskripsi as string,
+          id_pengguna: eventData?.id_pengguna
         };
       } else {
         toast({
           variant: 'destructive',
           title: 'User not found',
-          description: 'No user found with the given ID.'
+          description: 'No event found with the given ID.'
         });
       }
     } catch (error) {
@@ -51,7 +58,7 @@ export default async function Page({ params }: { params: { userId: string } }) {
     }
   } else {
     console.warn(
-      'Invalid or missing userIdString, initializing with default values for a new user.'
+      'Invalid or missing id_kegiatan, initializing with default values for a new kegiatan.'
     );
     formData = null;
   }
@@ -60,15 +67,7 @@ export default async function Page({ params }: { params: { userId: string } }) {
     <ScrollArea className="h-full">
       <div className="flex-1 space-y-4 p-5">
         <BreadCrumb items={breadcrumbItems} />
-        <UserForm
-          roles={[
-            { _id: 'ADMIN', name: 'Admin' },
-            { _id: 'TEACHER', name: 'Guru' },
-            { _id: 'USER', name: 'Pengguna' }
-          ]}
-          initialData={formData}
-          key={null}
-        />
+        <EventForm initialData={formData} key={null} />
       </div>
     </ScrollArea>
   );

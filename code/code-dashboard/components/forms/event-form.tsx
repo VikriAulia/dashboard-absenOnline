@@ -26,52 +26,53 @@ import {
 } from '@/components/ui/select';
 // import FileUpload from "@/components/FileUpload";
 import { useToast } from '../ui/use-toast';
-import { UserFormValuesTypes, userFormSchema } from '@/types';
+import { eventFormValuesTypes, eventFormSchema } from '@/types';
 import axios from 'axios';
 import { AlertModal } from '../modal/alert-modal';
+import { Textarea } from '../ui/textarea';
 
-interface UserFormProps {
+interface EventFormProps {
   initialData: any | null;
-  roles: any;
 }
 
-export const UserForm: React.FC<UserFormProps> = ({ initialData, roles }) => {
+export const EventForm: React.FC<EventFormProps> = ({ initialData }) => {
   const params = useParams();
   const router = useRouter();
   const { toast } = useToast();
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
-  const title = initialData ? 'Edit pengguna' : 'Buat pengguna baru';
+  const title = initialData ? 'Edit kegiatan' : 'Buat kegiatan baru';
   const description = initialData
-    ? 'Edit data pengguna.'
-    : 'Buat data pengguna baru dashboard';
+    ? 'Edit data kegiatan.'
+    : 'Buat data kegiatan baru';
   const toastMessage = initialData
-    ? 'Pengguna sudah diupdate'
-    : 'Pengguna baru berhasil dibuat.';
+    ? 'kegiatan sudah diupdate'
+    : 'kegiatan baru berhasil dibuat.';
   const action = initialData ? 'Simpan perubahan' : 'Kirim';
 
   const defaultValues = initialData
     ? initialData
     : {
-        id: '',
-        name: '',
-        email: '',
-        password: '',
-        role: ''
+        judul: '',
+        deskripsi: '',
+        waktu: new Date(),
+        kordinat_lokasi: '',
+        qr_code: '',
+        id_pengguna: ''
       };
 
-  const form = useForm<UserFormValuesTypes>({
-    resolver: zodResolver(userFormSchema),
+  const form = useForm<eventFormValuesTypes>({
+    resolver: zodResolver(eventFormSchema),
     defaultValues
   });
 
-  const onSubmit = async (data: UserFormValuesTypes) => {
+  const onSubmit = async (data: eventFormValuesTypes) => {
     try {
       setLoading(true);
       if (initialData) {
-        await axios.post(`/api/user/edit/${initialData.id}`, data);
+        await axios.post(`/api/kegiatan/edit/${initialData.id}`, data);
       } else {
-        const res = await axios.post(`/api/user/create`, data);
+        const res = await axios.post(`/api/kegiatan/create`, data);
         if (res.status !== 200) {
           toast({
             variant: 'destructive',
@@ -80,7 +81,7 @@ export const UserForm: React.FC<UserFormProps> = ({ initialData, roles }) => {
           });
         }
       }
-      router.push(`/dashboard/user`);
+      router.push(`/dashboard/kegiatan`);
       router.refresh();
       toast({
         variant: 'default',
@@ -100,9 +101,9 @@ export const UserForm: React.FC<UserFormProps> = ({ initialData, roles }) => {
   const onDelete = async () => {
     try {
       setLoading(true);
-      await axios.delete(`/api/user/delete/${params.userId}`);
+      await axios.delete(`/api/kegiatan/delete/${params.userId}`);
       router.refresh();
-      router.push(`/dashboard/user`);
+      router.push(`/dashboard/kegiatan`);
     } catch (error: any) {
     } finally {
       setLoading(false);
@@ -140,14 +141,14 @@ export const UserForm: React.FC<UserFormProps> = ({ initialData, roles }) => {
           <div className="gap-8 md:grid md:grid-cols-3">
             <FormField
               control={form.control}
-              name="name"
+              name="judul"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Name</FormLabel>
+                  <FormLabel>Judul Kegiatan</FormLabel>
                   <FormControl>
                     <Input
                       disabled={loading}
-                      placeholder="Nama pengguna baru"
+                      placeholder="Nama kegiatan"
                       {...field}
                     />
                   </FormControl>
@@ -157,15 +158,14 @@ export const UserForm: React.FC<UserFormProps> = ({ initialData, roles }) => {
             />
             <FormField
               control={form.control}
-              name="email"
+              name="waktu"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Email</FormLabel>
+                  <FormLabel>Waktu</FormLabel>
                   <FormControl>
                     <Input
-                      type="email"
+                      type="datetime-local"
                       disabled={loading}
-                      placeholder="Email aktif"
                       {...field}
                     />
                   </FormControl>
@@ -175,15 +175,14 @@ export const UserForm: React.FC<UserFormProps> = ({ initialData, roles }) => {
             />
             <FormField
               control={form.control}
-              name="password"
+              name="kordinat_lokasi"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Password</FormLabel>
+                  <FormLabel>Koordinat Lokasi</FormLabel>
                   <FormControl>
                     <Input
-                      type="password"
                       disabled={loading}
-                      placeholder="Password minimal 8 karekter"
+                      placeholder="Koordinat lokasi kegiatan"
                       {...field}
                     />
                   </FormControl>
@@ -193,33 +192,52 @@ export const UserForm: React.FC<UserFormProps> = ({ initialData, roles }) => {
             />
             <FormField
               control={form.control}
-              name="role"
+              name="qr_code"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Peran</FormLabel>
-                  <Select
-                    disabled={loading}
-                    onValueChange={field.onChange}
-                    value={field.value}
-                    defaultValue={field.value}
-                  >
-                    <FormControl placeholder="Pilih peran pengguna">
-                      <SelectTrigger>
-                        <SelectValue
-                          defaultValue={field.value}
-                          placeholder="Pilih peran pengguna"
-                        />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      {/* @ts-ignore  */}
-                      {roles.map((role) => (
-                        <SelectItem key={role._id} value={role._id}>
-                          {role.name}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
+                  <FormLabel>QR Code</FormLabel>
+                  <FormControl>
+                    <Input
+                      disabled={loading}
+                      placeholder="QR code kegiatan"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="id_pengguna"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>ID Pengguna</FormLabel>
+                  <FormControl>
+                    <Input
+                      type="number"
+                      disabled={loading}
+                      placeholder="ID pengguna"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="deskripsi"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Deskripsi</FormLabel>
+                  <FormControl>
+                    <Textarea
+                      disabled={loading}
+                      placeholder="Deskripsi kegiatan"
+                      {...field}
+                    />
+                  </FormControl>
                   <FormMessage />
                 </FormItem>
               )}

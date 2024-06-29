@@ -13,32 +13,70 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model pengguna_dashboard {
-  id_pengguna        Int            @id @default(autoincrement())
-  createdAt          DateTime       @default(now())
-  updatedAt          DateTime       @updatedAt
-  email              String         @unique
+model PenggunaDashboard {
+  id                 Int           @id @default(autoincrement())
+  createdAt          DateTime      @default(now())
+  updatedAt          DateTime      @updatedAt
+  email              String        @unique
   password           String
-  peran              peran_pengguna @default(USER)
+  peran              PeranPengguna @default(USER)
   nama               String
-  kegiatan_di_kelola kegiatan[]     @relation("pengelola_kegiatan")
+  kegiatan_di_kelola Kegiatan[]    @relation("pengelola_kegiatan")
+
+  @@map("pengguna_dashboard")
 }
 
-model kegiatan {
-  id_kegiatan     Int                @id @default(autoincrement())
-  createdAt       DateTime           @default(now())
-  updatedAt       DateTime           @updatedAt
-  judul           String
-  deskripsi       String?
-  waktu           DateTime
-  kordinat_lokasi String
-  qr_code         String?            @default("0")
-  id_pengguna     Int
-  pengelola       pengguna_dashboard @relation(fields: [id_pengguna], references: [id_pengguna], name: "pengelola_kegiatan")
-  attendees       kehadiran[]
+model Jadwal {
+  id         Int        @id @default(autoincrement())
+  createAt   DateTime   @default(now())
+  nama       String
+  mulai      DateTime   @db.Time()
+  selesai    DateTime   @db.Time()
+  keterangan String     @default("-")
+  kegiatan   Kegiatan[]
+
+  @@map("jadwal")
 }
 
-model siswa {
+model Lokasi {
+  id        Int        @id @default(autoincrement())
+  nama      String
+  latitude  Decimal
+  longitude Decimal
+  area      Int
+  kegiatan  Kegiatan[]
+
+  @@map("lokasi")
+}
+
+model Kegiatan {
+  id          Int               @id @default(autoincrement())
+  createdAt   DateTime          @default(now())
+  updatedAt   DateTime          @updatedAt
+  judul       String
+  deskripsi   String?
+  id_jadwal   Int
+  id_pengguna Int
+  id_lokasi   Int
+  jadwal      Jadwal            @relation(fields: [id_jadwal], references: [id])
+  pengelola   PenggunaDashboard @relation(fields: [id_pengguna], references: [id], name: "pengelola_kegiatan")
+  lokasi      Lokasi            @relation(fields: [id_lokasi], references: [id])
+  kehadiran   Kehadiran[]
+  qrcode      QrCode?
+
+  @@map("kegiatan")
+}
+
+model QrCode {
+  id          Int      @id @default(autoincrement())
+  id_kegiatan Int      @unique
+  key         String
+  kegiatan    Kegiatan @relation(fields: [id_kegiatan], references: [id])
+
+  @@map("qr_code")
+}
+
+model Siswa {
   NISN             Int         @id @default(autoincrement())
   createdAt        DateTime    @default(now())
   updatedAt        DateTime    @updatedAt
@@ -47,26 +85,30 @@ model siswa {
   email            String      @unique
   kelas            String
   device_id        String
-  daftar_kehadiran kehadiran[]
+  daftar_kehadiran Kehadiran[]
+
+  @@map("siswa")
 }
 
-model kehadiran {
-  id_kehadiran  Int              @id @default(autoincrement())
-  waktu_tanggal DateTime         @default(now())
+model Kehadiran {
+  id            Int             @id @default(autoincrement())
+  waktu_tanggal DateTime        @default(now())
   NISN          Int
   id_kegiatan   Int
-  status        status_kehadiran @default(ABSEN)
-  siswa         siswa            @relation(fields: [NISN], references: [NISN])
-  kegiatan      kegiatan         @relation(fields: [id_kegiatan], references: [id_kegiatan])
+  status        StatusKehadiran @default(ABSEN)
+  siswa         Siswa           @relation(fields: [NISN], references: [NISN])
+  kegiatan      Kegiatan        @relation(fields: [id_kegiatan], references: [id])
+
+  @@map("kehadiran")
 }
 
-enum peran_pengguna {
+enum PeranPengguna {
   ADMIN
   GURU
   USER
 }
 
-enum status_kehadiran {
+enum StatusKehadiran {
   HADIR
   ABSEN
   TERLAMBAT

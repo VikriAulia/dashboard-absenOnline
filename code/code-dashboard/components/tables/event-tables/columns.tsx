@@ -1,10 +1,10 @@
 'use client';
 import { ColumnDef } from '@tanstack/react-table';
 import { CellAction } from './cell-action';
-import { Event } from '@prisma/client';
+import { kegiatan } from '@prisma/client';
 import { Checkbox } from '@/components/ui/checkbox';
 
-export const columns: ColumnDef<Event>[] = [
+export const columns: ColumnDef<kegiatan>[] = [
   {
     id: 'select',
     header: ({ table }) => (
@@ -25,23 +25,23 @@ export const columns: ColumnDef<Event>[] = [
     enableHiding: false
   },
   {
-    accessorKey: 'title',
+    accessorKey: 'judul',
     header: 'NAMA KEGIATAN'
   },
   {
-    accessorKey: 'date',
+    accessorKey: 'judul',
     header: 'JADWAL KEGIATAN'
   },
   {
-    accessorKey: 'location',
+    accessorKey: 'kordinat_lokasi',
     header: 'KORDINAT LOKASI'
   },
   {
-    accessorKey: 'description',
+    accessorKey: 'deskripsi',
     header: 'DEKSPRIPSI KEGIATAN'
   },
   {
-    accessorKey: 'qrCode',
+    accessorKey: 'qr_code',
     header: 'KODE QR'
   },
   {

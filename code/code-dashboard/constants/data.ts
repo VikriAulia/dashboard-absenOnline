@@ -143,6 +143,24 @@ export const navItems: NavItem[] = [
     label: 'attendance'
   },
   {
+    title: ' 🔜 QR Code',
+    href: '/dashboard/qrcode',
+    icon: 'qrcode',
+    label: 'qrcode'
+  },
+  {
+    title: '🔜 Jadwal',
+    href: '/dashboard/jadwal',
+    icon: 'schedule',
+    label: 'schedule'
+  },
+  {
+    title: '🔜 Kordinat Lokasi',
+    href: '/dashboard/lokasi',
+    icon: 'location',
+    label: 'location'
+  },
+  {
     title: '❌ Profile',
     href: '/dashboard/profile',
     icon: 'profile',

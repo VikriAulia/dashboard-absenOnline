@@ -7,7 +7,7 @@ const prisma = new PrismaClient();
 
 export default async function page() {
 
-  const users = await prisma.dashboardUser.findMany()
+  const users = await prisma.pengguna_dashboard.findMany()
 
   return (
     <>

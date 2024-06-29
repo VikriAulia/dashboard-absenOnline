@@ -7,7 +7,7 @@ const prisma = new PrismaClient();
 
 export default async function page() {
 
-  const event = await prisma.event.findMany()
+  const event = await prisma.kegiatan.findMany()
 
   return (
     <>

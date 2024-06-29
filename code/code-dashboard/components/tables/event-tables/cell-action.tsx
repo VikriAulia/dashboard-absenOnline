@@ -11,10 +11,10 @@ import {
 import { Edit, MoreHorizontal, Trash } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
-import { Event } from '@prisma/client';
+import { kegiatan } from '@prisma/client';
 
 interface CellActionProps {
-  data: Event;
+  data: kegiatan;
 }
 
 export const CellAction: React.FC<CellActionProps> = ({ data }) => {
@@ -24,12 +24,12 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
 
   const onConfirm = async () => {
     setLoading(true);
-    if (typeof data.id !== 'number') {
+    if (typeof data.id_kegiatan !== 'number') {
       throw new Error('ID must be number');
     }
 
     try {
-      const response = await fetch(`/api/kegiatan/delete/${data.id}`, {
+      const response = await fetch(`/api/kegiatan/delete/${data.id_kegiatan}`, {
         method: 'DELETE'
       });
 
@@ -71,7 +71,7 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
           <DropdownMenuLabel>Actions</DropdownMenuLabel>
 
           <DropdownMenuItem
-            onClick={() => router.push(`/dashboard/kegiatan/${data.id}`)}
+            onClick={() => router.push(`/dashboard/kegiatan/${data.id_kegiatan}`)}
           >
             <Edit className="mr-2 h-4 w-4" /> Update
           </DropdownMenuItem>

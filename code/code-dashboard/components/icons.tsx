@@ -31,7 +31,10 @@ import {
   X,
   StoreIcon,
   SchoolIcon,
-  CheckSquareIcon
+  CheckSquareIcon,
+  QrCodeIcon,
+  Table2, 
+  SatelliteIcon
 } from 'lucide-react';
 
 export type Icon = LucideIcon;
@@ -84,5 +87,8 @@ export const Icons = {
   check: Check,
   store: StoreIcon,
   school: SchoolIcon,
-  attendance: CheckSquareIcon
+  attendance: CheckSquareIcon,
+  qrcode: QrCodeIcon,
+  schedule: Table2,
+  location: SatelliteIcon
 };

@@ -3,13 +3,13 @@ import { Button } from '@/components/ui/button';
 import { DataTable } from '@/components/ui/data-table';
 import { Heading } from '@/components/ui/heading';
 import { Separator } from '@/components/ui/separator';
-import { Event } from '@prisma/client';
+import { kegiatan } from '@prisma/client';
 import { Plus } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { columns } from './columns';
 
 interface EventProps {
-  data: Event[];
+  data: kegiatan[];
 }
 
 export const EventClient: React.FC<EventProps> = ({ data }) => {

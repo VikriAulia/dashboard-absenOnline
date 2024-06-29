@@ -13,62 +13,62 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model DashboardUser {
-  id              Int      @id @default(autoincrement())
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
-  email           String   @unique
-  password        String
-  role            UserRole @default(USER)
-  name            String?
-  organizedEvents Event[]  @relation("UserEvents")
+model pengguna_dashboard {
+  id_pengguna        Int            @id @default(autoincrement())
+  createdAt          DateTime       @default(now())
+  updatedAt          DateTime       @updatedAt
+  email              String         @unique
+  password           String
+  peran              peran_pengguna @default(USER)
+  nama               String
+  kegiatan_di_kelola kegiatan[]     @relation("pengelola_kegiatan")
 }
 
-model Event {
-  id          Int           @id @default(autoincrement())
-  createdAt   DateTime      @default(now())
-  updatedAt   DateTime      @updatedAt
-  title       String        @db.VarChar(255)
-  description String?
-  date        DateTime
-  location    String       @db.VarChar(255)
-  qrCode      String       @db.VarChar(255)
-  organizerId Int
-  organizer   DashboardUser @relation(fields: [organizerId], references: [id], name: "UserEvents")
-  attendees   Attendance[]
+model kegiatan {
+  id_kegiatan     Int                @id @default(autoincrement())
+  createdAt       DateTime           @default(now())
+  updatedAt       DateTime           @updatedAt
+  judul           String
+  deskripsi       String?
+  waktu           DateTime
+  kordinat_lokasi String
+  qr_code         String?            @default("0")
+  id_pengguna     Int
+  pengelola       pengguna_dashboard @relation(fields: [id_pengguna], references: [id_pengguna], name: "pengelola_kegiatan")
+  attendees       kehadiran[]
 }
 
-model Student {
-  id         Int          @id @default(autoincrement())
-  createdAt  DateTime     @default(now())
-  updatedAt  DateTime     @updatedAt
-  name       String       @db.VarChar(255)
-  age        Int
-  email      String       @unique
-  class      String       @db.VarChar(255)
-  device_id  String       @db.VarChar(255)
-  attendance Attendance[]
+model siswa {
+  NISN             Int         @id @default(autoincrement())
+  createdAt        DateTime    @default(now())
+  updatedAt        DateTime    @updatedAt
+  nama             String
+  tanggal_lahir    DateTime
+  email            String      @unique
+  kelas            String
+  device_id        String
+  daftar_kehadiran kehadiran[]
 }
 
-model Attendance {
-  id        Int              @id @default(autoincrement())
-  date      DateTime         @default(now())
-  studentId Int
-  eventId   Int
-  status    AttendanceStatus @default(ABSENT)
-  student   Student          @relation(fields: [studentId], references: [id])
-  event     Event            @relation(fields: [eventId], references: [id])
+model kehadiran {
+  id_kehadiran  Int              @id @default(autoincrement())
+  waktu_tanggal DateTime         @default(now())
+  NISN          Int
+  id_kegiatan   Int
+  status        status_kehadiran @default(ABSEN)
+  siswa         siswa            @relation(fields: [NISN], references: [NISN])
+  kegiatan      kegiatan         @relation(fields: [id_kegiatan], references: [id_kegiatan])
 }
 
-enum UserRole {
+enum peran_pengguna {
   ADMIN
-  TEACHER
+  GURU
   USER
 }
 
-enum AttendanceStatus {
-  PRESENT
-  ABSENT
-  LATE
-  EXCUSED
+enum status_kehadiran {
+  HADIR
+  ABSEN
+  TERLAMBAT
+  IZIN
 }

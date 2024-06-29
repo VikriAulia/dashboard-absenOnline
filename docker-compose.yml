@@ -8,7 +8,7 @@ services:
     volumes:
       - ./code:/home/node/code
     working_dir: /home/node/code/code-dashboard
-    command: npm run dev
+    # command: npm run dev
     # command: ["sh", "-c", "./start.sh"]
     depends_on:
       - backend

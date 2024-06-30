@@ -1,5 +1,4 @@
 import { Icons } from '@/components/icons';
-import { PrismaClient, pengguna_dashboard } from '@prisma/client';
 import { z } from 'zod';
 
 export interface NavItem {
@@ -33,8 +32,6 @@ export type MainNavItem = NavItemWithOptionalChildren;
 
 export type SidebarNavItem = NavItemWithChildren;
 
-export declare type DashboardUserType = pengguna_dashboard;
-
 /* Disini defenisi scema untuk form */
 export const userFormSchema = z.object({
   id: z.number(),
@@ -65,5 +62,20 @@ export const eventFormSchema = z.object({
   id_pengguna: z.number().int() // User ID managing the event
 });
 
+export const locationFormSchema = z.object({
+  id: z.number().int().optional(),
+  nama: z.string(),
+  latitude: z.string(),
+  longitude: z.string(),
+  area: z
+    .number()
+    .int('Area must be an integer')
+    .positive('Area must be a positive number')
+    .describe('Area dalam Meter')
+});
+
 export declare type UserFormValuesTypes = z.infer<typeof userFormSchema>;
 export declare type eventFormValuesTypes = z.infer<typeof eventFormSchema>;
+export declare type LocationFormValuesTypes = z.infer<
+  typeof locationFormSchema
+>;

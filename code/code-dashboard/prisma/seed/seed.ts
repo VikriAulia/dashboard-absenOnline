@@ -14,14 +14,17 @@ const main = async () => {
 
   // Seed the database with 10 data each
   await seed.siswa((x) => x(10));
-  await seed.pengguna_dashboard((x) => x(10));
+  await seed.penggunaDashboard((x) => x(10));
+  await seed.jadwal((x) => x(10));
+  await seed.lokasi((x) => x(10));
   // seed event and attendance
   await seed.kegiatan((createMany) =>
     createMany(10, {
-      // buat 10 kehadiran untuk setiap acara
+      // buat 50 kehadiran untuk setiap acara
       kehadiran: (createMany) => createMany(50)
     })
   );
+  await seed.qrCode((x) => x(10));
 
   // Type completion not working? You might want to reload your TypeScript Server to pick up the changes
 

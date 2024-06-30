@@ -155,7 +155,7 @@ export const navItems: NavItem[] = [
     label: 'schedule'
   },
   {
-    title: '🔜 Kordinat Lokasi',
+    title: 'Kordinat Lokasi',
     href: '/dashboard/lokasi',
     icon: 'location',
     label: 'location'

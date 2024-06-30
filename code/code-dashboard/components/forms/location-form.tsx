@@ -98,7 +98,7 @@ export const LocationForm: React.FC<LocationFormProps> = ({ initialData }) => {
   const onDelete = async () => {
     try {
       setLoading(true);
-      await axios.delete(`/api/lokasi/delete/${params.userId}`);
+      await axios.delete(`/api/lokasi/delete/${params.locationId}`);
       router.refresh();
       router.push(`/dashboard/lokasi`);
     } catch (error: any) {
@@ -194,13 +194,16 @@ export const LocationForm: React.FC<LocationFormProps> = ({ initialData }) => {
               name="area"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Radius / Area (M)</FormLabel>
-                  <Input
-                    type="number"
-                    disabled={loading}
-                    placeholder="Radius dari titik absen dalam Meter"
-                    {...field}
-                  />
+                  <FormLabel>Radius / Area (Meter)</FormLabel>
+                  <FormControl>
+                    <Input
+                      type="number"
+                      disabled={loading}
+                      placeholder="Radius dari titik absen dalam Meter"
+                      value={field.value} // Ensure value is controlled
+                      onChange={(e) => field.onChange(e.target.valueAsNumber)}
+                    />
+                  </FormControl>
                   <FormMessage />
                 </FormItem>
               )}

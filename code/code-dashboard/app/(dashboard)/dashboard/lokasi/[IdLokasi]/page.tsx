@@ -13,8 +13,8 @@ export default async function Page({
   params: { IdLokasi: string };
 }) {
   const breadcrumbItems = [
-    { title: 'User', link: '/dashboard/user' },
-    { title: 'Create', link: '/dashboard/user/create' }
+    { title: 'Lokasi', link: '/dashboard/lokasi' },
+    { title: 'Baru', link: '/dashboard/lokasi/create' }
   ];
 
   let formData: LocationFormValuesTypes | null = null;

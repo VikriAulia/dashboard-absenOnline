@@ -29,6 +29,7 @@ model PenggunaDashboard {
 model Jadwal {
   id         Int        @id @default(autoincrement())
   createAt   DateTime   @default(now())
+  updatedAt  DateTime   @updatedAt
   nama       String
   mulai      DateTime   @db.Time()
   selesai    DateTime   @db.Time()
@@ -40,9 +41,11 @@ model Jadwal {
 
 model Lokasi {
   id        Int        @id @default(autoincrement())
+  createAt  DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
   nama      String
-  latitude  Decimal
-  longitude Decimal
+  latitude  String
+  longitude String
   area      Int
   kegiatan  Kegiatan[]
 
@@ -69,6 +72,8 @@ model Kegiatan {
 
 model QrCode {
   id          Int      @id @default(autoincrement())
+  createAt    DateTime @default(now())
+  updatedAt   DateTime @updatedAt
   id_kegiatan Int      @unique
   key         String
   kegiatan    Kegiatan @relation(fields: [id_kegiatan], references: [id])
@@ -92,6 +97,8 @@ model Siswa {
 
 model Kehadiran {
   id            Int             @id @default(autoincrement())
+  createAt      DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
   waktu_tanggal DateTime        @default(now())
   NISN          Int
   id_kegiatan   Int

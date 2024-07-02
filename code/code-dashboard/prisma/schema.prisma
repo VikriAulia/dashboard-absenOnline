@@ -61,9 +61,9 @@ model Kegiatan {
   id_jadwal   Int
   id_pengguna Int
   id_lokasi   Int
-  jadwal      Jadwal            @relation(fields: [id_jadwal], references: [id])
-  pengelola   PenggunaDashboard @relation(fields: [id_pengguna], references: [id], name: "pengelola_kegiatan")
-  lokasi      Lokasi            @relation(fields: [id_lokasi], references: [id])
+  jadwal      Jadwal            @relation(fields: [id_jadwal], references: [id], onDelete: Restrict)
+  pengelola   PenggunaDashboard @relation(fields: [id_pengguna], references: [id], name: "pengelola_kegiatan", onDelete: Restrict)
+  lokasi      Lokasi            @relation(fields: [id_lokasi], references: [id], onDelete: Restrict)
   kehadiran   Kehadiran[]
   qrcode      QrCode?
 

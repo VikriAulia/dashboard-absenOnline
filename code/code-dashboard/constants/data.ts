@@ -149,7 +149,7 @@ export const navItems: NavItem[] = [
     label: 'qrcode'
   },
   {
-    title: '🔜 Jadwal',
+    title: 'Jadwal',
     href: '/dashboard/jadwal',
     icon: 'schedule',
     label: 'schedule'

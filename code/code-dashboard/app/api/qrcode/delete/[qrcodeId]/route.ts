@@ -1,11 +1,11 @@
-// File: app/api/user/delete/[locationId]/route.ts
+// File: app/api/user/delete/[qrcodeId]/route.ts
 
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from 'lib/utils';
 
 export async function DELETE(
   req: NextRequest,
-  { params }: { params: { locationId: string } }
+  { params }: { params: { qrcodeId: string } }
 ) {
   try {
     // Ensure we're dealing with a DELETE request
@@ -16,25 +16,28 @@ export async function DELETE(
       );
     }
 
-    // Extract the locationId from the URL
-    const locationId = parseInt(params.locationId);
+    // Extract the qrcodeId from the URL
+    const qrcodeId = parseInt(params.qrcodeId);
 
-    // Validate locationId
-    if (!locationId) {
+    // Validate qrcodeId
+    if (!qrcodeId) {
       return NextResponse.json(
-        { message: 'locationId is required' },
+        { message: 'qrcodeId is required' },
         { status: 400 }
       );
     }
 
-    // Ensure locationId is a number
-    if (isNaN(locationId)) {
-      return NextResponse.json({ message: 'Invalid locationId' }, { status: 400 });
+    // Ensure qrcodeId is a number
+    if (isNaN(qrcodeId)) {
+      return NextResponse.json(
+        { message: 'Invalid qrcodeId' },
+        { status: 400 }
+      );
     }
 
     // Perform the deletion operation
-    await prisma.lokasi.delete({
-      where: { id: locationId }
+    await prisma.qrCode.delete({
+      where: { id: qrcodeId }
     });
 
     // Send a success response

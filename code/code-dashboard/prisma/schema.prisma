@@ -31,8 +31,8 @@ model Jadwal {
   createAt   DateTime   @default(now())
   updatedAt  DateTime   @updatedAt
   nama       String
-  mulai      DateTime   @db.Time()
-  selesai    DateTime   @db.Time()
+  mulai      String
+  selesai    String
   keterangan String     @default("-")
   kegiatan   Kegiatan[]
 

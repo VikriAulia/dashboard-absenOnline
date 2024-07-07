@@ -2,7 +2,7 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from 'lib/utils'; // Adjust the import path to your Prisma instance
-import { userFormSchema } from '@/types';
+import { userFormSchema, UserFormValuesTypes } from '@/types';
 import { z } from 'zod';
 import bcrypt from 'bcrypt';
 
@@ -18,18 +18,18 @@ export async function POST(req: Request) {
 
     // Parse and validate the request body
     const body = await req.json();
-    const data = userFormSchema.parse(body);
+    const data: UserFormValuesTypes = userFormSchema.parse(body);
 
     // Hash the password using bcrypt
-    const hashedPassword = await bcrypt.hash(data.password, 10);
+    const hashedPassword = await bcrypt.hash(data.password as string, 10);
 
     // Create the user in the database
-    await prisma.dashboardUser.create({
+    await prisma.penggunaDashboard.create({
       data: {
         email: data.email,
         password: hashedPassword, // Ideally, hash the password before storing it
-        role: data.role,
-        name: data.name
+        peran: data.role,
+        nama: data.name
       }
     });
 

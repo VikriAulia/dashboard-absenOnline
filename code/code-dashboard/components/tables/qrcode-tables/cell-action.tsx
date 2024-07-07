@@ -8,13 +8,20 @@ import {
   DropdownMenuLabel,
   DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu';
-import { Edit, MoreHorizontal, Trash } from 'lucide-react';
+import { MoreHorizontal, Trash } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
-import { QrCode } from '@prisma/client';
 
+interface MergedData {
+  id: number;
+  id_kegiatan: number;
+  key: string;
+  judul: string;
+  deskripsi: string | null;
+  // Add other fields as necessary
+}
 interface CellActionProps {
-  data: QrCode;
+  data: MergedData;
 }
 
 export const CellAction: React.FC<CellActionProps> = ({ data }) => {
@@ -69,12 +76,6 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
           <DropdownMenuLabel>Actions</DropdownMenuLabel>
-
-          <DropdownMenuItem
-            onClick={() => router.push(`/dashboard/qrcode/${data.id}`)}
-          >
-            <Edit className="mr-2 h-4 w-4" /> Update
-          </DropdownMenuItem>
           <DropdownMenuItem onClick={() => setOpen(true)}>
             <Trash className="mr-2 h-4 w-4" /> Delete
           </DropdownMenuItem>

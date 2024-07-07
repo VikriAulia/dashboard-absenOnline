@@ -7,8 +7,16 @@ import { QrCode } from '@prisma/client';
 import QRCode from 'qrcode';
 import Image from 'next/image';
 
+interface MergedData {
+  id: number;
+  id_kegiatan: number;
+  key: string;
+  judul: string;
+  deskripsi: string | null;
+  // Add other fields as necessary
+}
 interface CellDownloadProps {
-  data: QrCode;
+  data: MergedData;
 }
 
 export const CellDownload: React.FC<CellDownloadProps> = ({ data }) => {
@@ -30,6 +38,7 @@ export const CellDownload: React.FC<CellDownloadProps> = ({ data }) => {
 
     try {
       const url = `${baseUrl}/api/qrcode/cek/${data.key}`;
+      console.log(url);
       const opts = {
         errorCorrectionLevel: 'H',
         type: 'image/png', // Using PNG format
@@ -61,7 +70,7 @@ export const CellDownload: React.FC<CellDownloadProps> = ({ data }) => {
     <>
       <Button variant="ghost" onClick={onClick} disabled={loading}>
         <DownloadIcon className="mr-4 h-4 w-4" />
-        {loading ? 'Generating...' : 'Unduh QR Code'}
+        {loading ? 'Generating...' : 'Buat QR Code'}
       </Button>
       {qrCodeData && (
         <a

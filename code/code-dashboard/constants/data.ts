@@ -137,13 +137,13 @@ export const navItems: NavItem[] = [
     label: 'school'
   },
   {
-    title: 'Kehadiran',
+    title: '🔜Kehadiran',
     href: '/dashboard/attendance',
     icon: 'attendance',
     label: 'attendance'
   },
   {
-    title: ' 🔜 QR Code',
+    title: 'QR Code',
     href: '/dashboard/qrcode',
     icon: 'qrcode',
     label: 'qrcode'

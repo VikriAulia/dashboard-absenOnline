@@ -4,14 +4,23 @@ import { CellAction } from './cell-action';
 import { CellDownload } from './cell-download';
 import { QrCode } from '@prisma/client';
 
-export const columns: ColumnDef<QrCode>[] = [
+interface MergedData {
+  id: number;
+  id_kegiatan: number;
+  key: string;
+  judul: string;
+  deskripsi: string | null;
+  // Add other fields as necessary
+}
+
+export const columns: ColumnDef<MergedData>[] = [
   {
-    accessorKey: 'id_kegiatan',
-    header: 'ID KEGIATAN KESISWAAN'
+    accessorKey: 'judul',
+    header: 'JUDUL KEGIATAN KESISWAAN'
   },
   {
-    accessorKey: 'key',
-    header: 'KEY'
+    accessorKey: 'deskripsi',
+    header: 'DESKRIPSI'
   },
   {
     id: 'download',

@@ -2,10 +2,10 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from 'lib/utils'; // Adjust the import path to your Prisma instance
-import { locationFormSchema } from '@/types';
 import { z } from 'zod';
+import bcrypt from 'bcrypt';
 
-export async function POST(req: NextRequest) {
+export async function POST(req: NextRequest, res: NextResponse) {
   try {
     // Ensure we're dealing with a POST request
     if (req.method !== 'POST') {
@@ -15,23 +15,48 @@ export async function POST(req: NextRequest) {
       );
     }
 
+    // Define schema using zod
+    const qrcodeFormSchema = z.object({
+      id_kegiatan: z.number().int().nullable()
+    });
+
     // Parse and validate the request body
     const body = await req.json();
-    const data = locationFormSchema.parse(body);
+    const data = qrcodeFormSchema.parse(body);
+
+    if (data.id_kegiatan === null) {
+      return NextResponse.json(
+        { message: 'Invalid qrcodeId = null' },
+        { status: 400 }
+      );
+    }
+
+    const kegiatan = await prisma.kegiatan.findUnique({
+      where: {
+        id: data.id_kegiatan
+      }
+    });
+
+    if (kegiatan == null) {
+      return NextResponse.json(
+        { message: 'Kegiatan not found' },
+        { status: 404 }
+      );
+    }
+
+    const hashedKey = await bcrypt.hash(kegiatan?.judul, 10);
 
     // Create the user in the database
-    await prisma.lokasi.create({
+    await prisma.qrCode.create({
       data: {
-        nama: data.nama,
-        latitude: data.latitude,
-        longitude: data.longitude,
-        area: data.area
+        key: hashedKey,
+        id_kegiatan: data.id_kegiatan
       }
     });
 
     // Send a success response
     return NextResponse.json(
-      { message: 'Create location successfully' },
+      { message: 'Create qrcode successfully' },
       { status: 200 }
     );
   } catch (error: any) {

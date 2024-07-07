@@ -7,12 +7,13 @@ const prisma = new PrismaClient();
 
 export default async function page() {
   const daftarQrcode = await prisma.qrCode.findMany();
+  const daftarKegiatan = await prisma.kegiatan.findMany();
 
   return (
     <>
       <div className="flex-1 space-y-4  p-4 pt-6 md:p-8">
         <BreadCrumb items={breadcrumbItems} />
-        <QrcodeClient data={daftarQrcode} />
+        <QrcodeClient data={daftarQrcode} kegiatan={daftarKegiatan} />
       </div>
     </>
   );

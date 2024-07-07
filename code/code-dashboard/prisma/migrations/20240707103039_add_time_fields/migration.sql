@@ -1,0 +1,3 @@
+-- AlterTable
+ALTER TABLE "jadwal" ALTER COLUMN "mulai" SET DATA TYPE TEXT,
+ALTER COLUMN "selesai" SET DATA TYPE TEXT;

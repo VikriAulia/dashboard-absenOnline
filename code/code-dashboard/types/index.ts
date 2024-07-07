@@ -74,6 +74,7 @@ export const locationFormSchema = z.object({
     .describe('Area dalam Meter')
 });
 
+
 export const jadwalFormSchema = z.object({
   id: z.number().int().optional(), // Primary key, optional for create operations
   nama: z.string().min(3, 'Nama harus memiliki minimal 3 karakter'), // Name with minimum length
@@ -103,9 +104,16 @@ export const jadwalFormSchema = z.object({
     .optional() // Description with minimum length
 });
 
+export const qrcodeFormSchema = z.object({
+  id: z.number().int().optional(), // Primary key, optional for create operations
+  id_kegiatan: z.number().int(), // Unique event ID
+  key: z.string().min(1, 'Key harus memiliki minimal 1 karakter') // Key with minimum length
+});
+
 export declare type UserFormValuesTypes = z.infer<typeof userFormSchema>;
 export declare type eventFormValuesTypes = z.infer<typeof eventFormSchema>;
 export declare type LocationFormValuesTypes = z.infer<
   typeof locationFormSchema
 >;
 export declare type JadwalFormValuesTypes = z.infer<typeof jadwalFormSchema>;
+export declare type QrcodeFormValuesTypes = z.infer<typeof qrcodeFormSchema>;

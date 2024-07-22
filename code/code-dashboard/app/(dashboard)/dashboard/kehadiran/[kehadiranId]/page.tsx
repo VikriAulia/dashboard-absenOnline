@@ -22,7 +22,7 @@ export default async function Page({ params }: { params: { userId: string } }) {
   if (!isNaN(Id) && Id > 0) {
     try {
       console.log(`Id: ${Id}`);
-      const userData = await prisma.penggunaDashboard.findUnique({
+      const userData = await prisma.kehadiran.findUnique({
         where: {
           id: Id
         }
@@ -33,7 +33,7 @@ export default async function Page({ params }: { params: { userId: string } }) {
           id: Id,
           email: userData?.email as string,
           name: userData?.nama as string,
-          role: userData?.peran || 'GURU'
+          role: userData?.peran || 'USER'
         };
       } else {
         toast({
@@ -63,7 +63,8 @@ export default async function Page({ params }: { params: { userId: string } }) {
         <UserForm
           roles={[
             { _id: 'ADMIN', name: 'Admin' },
-            { _id: 'GURU', name: 'Guru' }
+            { _id: 'GURU', name: 'Guru' },
+            { _id: 'USER', name: 'Pengguna' }
           ]}
           initialData={formData}
           key={null}

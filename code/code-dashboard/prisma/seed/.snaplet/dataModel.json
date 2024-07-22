@@ -183,7 +183,7 @@
           "id": "public.jadwal.mulai",
           "name": "mulai",
           "columnName": "mulai",
-          "type": "time",
+          "type": "text",
           "isRequired": true,
           "kind": "scalar",
           "isList": false,
@@ -197,7 +197,7 @@
           "id": "public.jadwal.selesai",
           "name": "selesai",
           "columnName": "selesai",
-          "type": "time",
+          "type": "text",
           "isRequired": true,
           "kind": "scalar",
           "isList": false,
@@ -1177,9 +1177,6 @@
         },
         {
           "name": "GURU"
-        },
-        {
-          "name": "USER"
         }
       ]
     },

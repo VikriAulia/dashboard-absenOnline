@@ -9,12 +9,12 @@ import {
   DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu';
 import { Edit, MoreHorizontal, Trash } from 'lucide-react';
-import { useRouter } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import { useState } from 'react';
-import { PenggunaDashboard } from '@prisma/client';
+import { Siswa } from '@prisma/client';
 
 interface CellActionProps {
-  data: PenggunaDashboard;
+  data: Siswa;
 }
 
 export const CellAction: React.FC<CellActionProps> = ({ data }) => {
@@ -22,35 +22,7 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
   const [open, setOpen] = useState(false);
   const router = useRouter();
 
-  const onConfirm = async () => {
-    setLoading(true);
-    if (typeof data.id !== 'number') {
-      throw new Error('ID must be number');
-    }
-
-    try {
-      const response = await fetch(`/api/user/delete/${data.id}`, {
-        method: 'DELETE'
-      });
-
-      if (!response.ok) {
-        throw new Error(`Error: ${response.status}`);
-      }
-
-      const result = await response.json();
-      console.log(result.message);
-      // close dialog modal
-      setLoading(false);
-      setOpen(false);
-      // Reload the page to reflect changes
-      window.location.reload();
-    } catch (error) {
-      setLoading(false);
-      setOpen(false);
-      console.error(`Failed to delete user: ${error}`);
-      throw new Error(`Failed to delete user`);
-    }
-  };
+  const onConfirm = async () => {};
 
   return (
     <>
@@ -71,7 +43,7 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
           <DropdownMenuLabel>Actions</DropdownMenuLabel>
 
           <DropdownMenuItem
-            onClick={() => router.push(`/dashboard/user/${data.id}`)}
+            onClick={() => router.push(`/dashboard/siswa/${data.NISN}`)}
           >
             <Edit className="mr-2 h-4 w-4" /> Update
           </DropdownMenuItem>

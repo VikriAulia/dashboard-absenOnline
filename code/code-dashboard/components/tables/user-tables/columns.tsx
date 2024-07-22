@@ -1,10 +1,10 @@
 'use client';
 import { ColumnDef } from '@tanstack/react-table';
 import { CellAction } from './cell-action';
-import { peran_pengguna } from '@prisma/client';
+import { PenggunaDashboard } from '@prisma/client';
 import { Checkbox } from '@/components/ui/checkbox';
 
-export const columns: ColumnDef<peran_pengguna>[] = [
+export const columns: ColumnDef<PenggunaDashboard>[] = [
   {
     id: 'select',
     header: ({ table }) => (

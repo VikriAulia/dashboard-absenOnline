@@ -1,4 +1,5 @@
 'use client';
+
 import { useState } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
@@ -9,7 +10,6 @@ import { Button } from '@/components/ui/button';
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -24,18 +24,26 @@ import {
   SelectTrigger,
   SelectValue
 } from '@/components/ui/select';
-// import FileUpload from "@/components/FileUpload";
 import { useToast } from '../ui/use-toast';
 import { eventFormValuesTypes, eventFormSchema } from '@/types';
 import axios from 'axios';
 import { AlertModal } from '../modal/alert-modal';
 import { Textarea } from '../ui/textarea';
+import { Lokasi, Jadwal, PenggunaDashboard } from '@prisma/client';
 
 interface EventFormProps {
-  initialData: any | null;
+  initialData: eventFormValuesTypes | null;
+  dataJadwal: Jadwal[];
+  dataLokasi: Lokasi[];
+  dataPengguna: PenggunaDashboard[];
 }
 
-export const EventForm: React.FC<EventFormProps> = ({ initialData }) => {
+export const EventForm: React.FC<EventFormProps> = ({
+  initialData,
+  dataJadwal,
+  dataLokasi,
+  dataPengguna
+}) => {
   const params = useParams();
   const router = useRouter();
   const { toast } = useToast();
@@ -46,19 +54,28 @@ export const EventForm: React.FC<EventFormProps> = ({ initialData }) => {
     ? 'Edit data kegiatan.'
     : 'Buat data kegiatan baru';
   const toastMessage = initialData
-    ? 'kegiatan sudah diupdate'
-    : 'kegiatan baru berhasil dibuat.';
+    ? 'Kegiatan sudah diupdate'
+    : 'Kegiatan baru berhasil dibuat.';
   const action = initialData ? 'Simpan perubahan' : 'Kirim';
 
-  const defaultValues = initialData
-    ? initialData
+  const defaultValues: eventFormValuesTypes = initialData
+    ? {
+        judul: initialData.judul,
+        deskripsi: initialData.deskripsi,
+        id_jadwal: initialData.id_jadwal,
+        id_pengguna: initialData.id_pengguna,
+        id_lokasi: initialData.id_lokasi,
+        id_kegiatan: initialData.id_kegiatan
+          ? initialData.id_kegiatan
+          : undefined
+      }
     : {
         judul: '',
         deskripsi: '',
-        waktu: new Date(),
-        kordinat_lokasi: '',
-        qr_code: '',
-        id_pengguna: ''
+        id_jadwal: '',
+        id_pengguna: '',
+        id_lokasi: '',
+        id_kegiatan: undefined
       };
 
   const form = useForm<eventFormValuesTypes>({
@@ -70,7 +87,7 @@ export const EventForm: React.FC<EventFormProps> = ({ initialData }) => {
     try {
       setLoading(true);
       if (initialData) {
-        await axios.post(`/api/kegiatan/edit/${initialData.id}`, data);
+        await axios.post(`/api/kegiatan/edit/${initialData.id_kegiatan}`, data);
       } else {
         const res = await axios.post(`/api/kegiatan/create`, data);
         if (res.status !== 200) {
@@ -101,7 +118,7 @@ export const EventForm: React.FC<EventFormProps> = ({ initialData }) => {
   const onDelete = async () => {
     try {
       setLoading(true);
-      await axios.delete(`/api/kegiatan/delete/${params.userId}`);
+      await axios.delete(`/api/kegiatan/delete/${params.eventId}`);
       router.refresh();
       router.push(`/dashboard/kegiatan`);
     } catch (error: any) {
@@ -158,14 +175,14 @@ export const EventForm: React.FC<EventFormProps> = ({ initialData }) => {
             />
             <FormField
               control={form.control}
-              name="waktu"
+              name="deskripsi"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Waktu</FormLabel>
+                  <FormLabel>Deskripsi</FormLabel>
                   <FormControl>
-                    <Input
-                      type="datetime-local"
+                    <Textarea
                       disabled={loading}
+                      placeholder="Deskripsi kegiatan"
                       {...field}
                     />
                   </FormControl>
@@ -175,16 +192,30 @@ export const EventForm: React.FC<EventFormProps> = ({ initialData }) => {
             />
             <FormField
               control={form.control}
-              name="kordinat_lokasi"
+              name="id_jadwal"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Koordinat Lokasi</FormLabel>
+                  <FormLabel>Jadwal</FormLabel>
                   <FormControl>
-                    <Input
+                    <Select
                       disabled={loading}
-                      placeholder="Koordinat lokasi kegiatan"
-                      {...field}
-                    />
+                      onValueChange={field.onChange}
+                      value={field.value.toString()}
+                    >
+                      <SelectTrigger>
+                        <SelectValue placeholder="Pilih jadwal" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {dataJadwal?.map((jadwal) => (
+                          <SelectItem
+                            key={jadwal.id}
+                            value={jadwal.id.toString()}
+                          >
+                            {jadwal.nama}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -192,16 +223,30 @@ export const EventForm: React.FC<EventFormProps> = ({ initialData }) => {
             />
             <FormField
               control={form.control}
-              name="qr_code"
+              name="id_lokasi"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>QR Code</FormLabel>
+                  <FormLabel>Lokasi</FormLabel>
                   <FormControl>
-                    <Input
+                    <Select
                       disabled={loading}
-                      placeholder="QR code kegiatan"
-                      {...field}
-                    />
+                      onValueChange={field.onChange}
+                      value={field.value.toString()}
+                    >
+                      <SelectTrigger>
+                        <SelectValue placeholder="Pilih lokasi" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {dataLokasi?.map((lokasi) => (
+                          <SelectItem
+                            key={lokasi.id}
+                            value={lokasi.id.toString()}
+                          >
+                            {lokasi.nama}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -214,29 +259,25 @@ export const EventForm: React.FC<EventFormProps> = ({ initialData }) => {
                 <FormItem>
                   <FormLabel>ID Pengguna</FormLabel>
                   <FormControl>
-                    <Input
-                      type="number"
+                    <Select
                       disabled={loading}
-                      placeholder="ID pengguna"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="deskripsi"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Deskripsi</FormLabel>
-                  <FormControl>
-                    <Textarea
-                      disabled={loading}
-                      placeholder="Deskripsi kegiatan"
-                      {...field}
-                    />
+                      onValueChange={field.onChange}
+                      value={field.value.toString()}
+                    >
+                      <SelectTrigger>
+                        <SelectValue placeholder="Pilih penguna" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {dataPengguna?.map((pengguna) => (
+                          <SelectItem
+                            key={pengguna.id}
+                            value={pengguna.id.toString()}
+                          >
+                            {pengguna.nama}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
                   </FormControl>
                   <FormMessage />
                 </FormItem>

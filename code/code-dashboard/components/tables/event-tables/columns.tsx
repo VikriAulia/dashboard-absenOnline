@@ -1,48 +1,44 @@
 'use client';
 import { ColumnDef } from '@tanstack/react-table';
 import { CellAction } from './cell-action';
-import { kegiatan } from '@prisma/client';
-import { Checkbox } from '@/components/ui/checkbox';
 
-export const columns: ColumnDef<kegiatan>[] = [
-  {
-    id: 'select',
-    header: ({ table }) => (
-      <Checkbox
-        checked={table.getIsAllPageRowsSelected()}
-        onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-        aria-label="Select all"
-      />
-    ),
-    cell: ({ row }) => (
-      <Checkbox
-        checked={row.getIsSelected()}
-        onCheckedChange={(value) => row.toggleSelected(!!value)}
-        aria-label="Select row"
-      />
-    ),
-    enableSorting: false,
-    enableHiding: false
-  },
+interface FormattedEvent {
+  id: number;
+  judul: string;
+  deskripsi: string | null;
+  jadwalMulai: string;
+  jadwalSelesai: string;
+  namaJadwal: string;
+  namaPengelola: string;
+  namaLokasi: string;
+  id_jadwal: number;
+  id_lokasi: number;
+  id_pengguna: number;
+  id_qrcode: number | undefined;
+}
+
+export const columns: ColumnDef<FormattedEvent>[] = [
   {
     accessorKey: 'judul',
     header: 'NAMA KEGIATAN'
   },
+  { accessorKey: 'namaPengelola', header: 'PENGELOLA' },
   {
-    accessorKey: 'judul',
-    header: 'JADWAL KEGIATAN'
+    accessorKey: 'jadwalMulai',
+    header: 'JADWAL MULAI'
   },
   {
-    accessorKey: 'kordinat_lokasi',
-    header: 'KORDINAT LOKASI'
+    accessorKey: 'jadwalSelesai',
+    header: 'JADWAL SELESAI'
+  },
+  { accessorKey: 'namaJadwal', header: 'JADWAL' },
+  {
+    accessorKey: 'namaLokasi',
+    header: 'LOKASI'
   },
   {
     accessorKey: 'deskripsi',
     header: 'DEKSPRIPSI KEGIATAN'
-  },
-  {
-    accessorKey: 'qr_code',
-    header: 'KODE QR'
   },
   {
     id: 'actions',

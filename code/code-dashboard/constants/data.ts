@@ -132,13 +132,13 @@ export const navItems: NavItem[] = [
   },
   {
     title: 'Peserta Didik',
-    href: '/dashboard/employee',
+    href: '/dashboard/siswa',
     icon: 'school',
     label: 'school'
   },
   {
-    title: '🔜Kehadiran',
-    href: '/dashboard/attendance',
+    title: 'Kehadiran',
+    href: '/dashboard/kehadiran',
     icon: 'attendance',
     label: 'attendance'
   },

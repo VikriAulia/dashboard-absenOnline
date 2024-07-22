@@ -1,5 +1,8 @@
 {
-  "extends": "next/core-web-vitals",
+  "extends": [
+    "next",
+    "prettier"
+  ],
   "plugins": [
     "@typescript-eslint"
   ],
@@ -17,6 +20,7 @@
     ],
     "import/no-unresolved": "off",
     "import/named": "off",
-    "no-console": "warn"
+    "no-console": "off"
+
   }
 }

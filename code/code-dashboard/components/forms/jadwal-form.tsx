@@ -49,13 +49,17 @@ export const JadwalForm: React.FC<JadwalFormProps> = ({ initialData }) => {
     : 'jadwal baru berhasil dibuat.';
   const action = initialData ? 'Simpan perubahan' : 'Kirim';
 
-  const defaultValues: JadwalFormValuesTypes = initialData
-    ? initialData
+  const defaultValues = initialData
+    ? {
+        ...initialData,
+        jamMulai: initialData.jamMulai.slice(0, 5), // Ensure format "HH:MM"
+        jamSelesai: initialData.jamSelesai.slice(0, 5) // Ensure format "HH:MM"
+      }
     : {
         nama: '',
-        jamMulai: new Date(),
-        jamSelesai: new Date(),
-        keterangan: `-`
+        jamMulai: '08:00', // Default time
+        jamSelesai: '17:00', // Default time
+        keterangan: '-'
       };
 
   const form = useForm<JadwalFormValuesTypes>({
@@ -164,11 +168,7 @@ export const JadwalForm: React.FC<JadwalFormProps> = ({ initialData }) => {
                       type="time"
                       disabled={loading}
                       placeholder="Pilih jam mulai kegiatan"
-                      value={
-                        field.value instanceof Date
-                          ? field.value.toTimeString().slice(0, 5)
-                          : (field.value as string)
-                      }
+                      value={field.value as string}
                       onChange={(e) => field.onChange(e.target.value)}
                     />
                   </FormControl>
@@ -187,12 +187,8 @@ export const JadwalForm: React.FC<JadwalFormProps> = ({ initialData }) => {
                     <Input
                       type="time"
                       disabled={loading}
-                      placeholder="Pilih jam Selesai kegiatan"
-                      value={
-                        field.value instanceof Date
-                          ? field.value.toTimeString().slice(0, 5)
-                          : field.value
-                      }
+                      placeholder="Pilih jam selesai kegiatan"
+                      value={field.value as string}
                       onChange={(e) => field.onChange(e.target.value)}
                     />
                   </FormControl>

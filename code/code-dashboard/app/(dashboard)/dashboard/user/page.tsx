@@ -1,12 +1,14 @@
 import BreadCrumb from '@/components/breadcrumb';
 import { UserClient } from '@/components/tables/user-tables/client';
-import { PrismaClient, Prisma } from '@prisma/client';
+import { PrismaClient } from '@prisma/client';
 
-const breadcrumbItems = [{ title: 'User', link: '/dashboard/user' }];
+const breadcrumbItems = [
+  { title: 'Daftar akun absen online', link: '/dashboard/user' }
+];
 const prisma = new PrismaClient();
 
 export default async function page() {
-  const users = await prisma.penggunaDashboard.findMany()
+  const users = await prisma.penggunaDashboard.findMany();
 
   return (
     <>

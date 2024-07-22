@@ -3,34 +3,34 @@ import { Button } from '@/components/ui/button';
 import { DataTable } from '@/components/ui/data-table';
 import { Heading } from '@/components/ui/heading';
 import { Separator } from '@/components/ui/separator';
-import { PenggunaDashboard } from '@prisma/client';
 import { Plus } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { columns } from './columns';
+import { MergedKehadiranData } from '@/types';
 
-interface DashboardUserProps {
-  data: PenggunaDashboard[];
+interface KehadiranProps {
+  data: MergedKehadiranData[];
 }
 
-export const UserClient: React.FC<DashboardUserProps> = ({ data }) => {
+export const KehadiranClient: React.FC<KehadiranProps> = ({ data }) => {
   const router = useRouter();
 
   return (
     <>
       <div className="flex items-start justify-between">
         <Heading
-          title={`Daftar akun absen (${data.length})`}
-          description="Manage users (Client side table functionalities.)"
+          title={`Daftar kehadiran siswa (${data.length})`}
+          description="Kelola daftar kehadiran siswa"
         />
         <Button
           className="text-xs md:text-sm"
-          onClick={() => router.push(`/dashboard/user/new`)}
+          onClick={() => router.push(`/dashboard/kehadiran/new`)}
         >
-          <Plus className="mr-2 h-4 w-4" /> Add New
+          <Plus className="mr-2 h-4 w-4" /> Tambah data
         </Button>
       </div>
       <Separator />
-      <DataTable searchKey="name" columns={columns} data={data} />
+      <DataTable searchKey="namaSiswa" columns={columns} data={data} />
     </>
   );
 };

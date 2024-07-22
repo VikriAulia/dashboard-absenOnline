@@ -19,7 +19,7 @@ model PenggunaDashboard {
   updatedAt          DateTime      @updatedAt
   email              String        @unique
   password           String
-  peran              PeranPengguna @default(USER)
+  peran              PeranPengguna @default(GURU)
   nama               String
   kegiatan_di_kelola Kegiatan[]    @relation("pengelola_kegiatan")
 
@@ -112,7 +112,6 @@ model Kehadiran {
 enum PeranPengguna {
   ADMIN
   GURU
-  USER
 }
 
 enum StatusKehadiran {

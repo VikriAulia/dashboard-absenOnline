@@ -11,10 +11,11 @@ import {
 import { Edit, MoreHorizontal, Trash } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
-import { PenggunaDashboard } from '@prisma/client';
+import { Kehadiran } from '@prisma/client';
+import { MergedKehadiranData } from '@/types';
 
 interface CellActionProps {
-  data: PenggunaDashboard;
+  data: MergedKehadiranData;
 }
 
 export const CellAction: React.FC<CellActionProps> = ({ data }) => {
@@ -71,7 +72,7 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
           <DropdownMenuLabel>Actions</DropdownMenuLabel>
 
           <DropdownMenuItem
-            onClick={() => router.push(`/dashboard/user/${data.id}`)}
+            onClick={() => router.push(`/dashboard/kehadiran/${data.id}`)}
           >
             <Edit className="mr-2 h-4 w-4" /> Update
           </DropdownMenuItem>

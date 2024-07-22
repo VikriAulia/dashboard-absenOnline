@@ -1,10 +1,9 @@
-// File: app/api/user/create/route.ts
+// File: app/api/kegiatan/create/route.ts
 
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from 'lib/utils'; // Adjust the import path to your Prisma instance
-import { userFormSchema, UserFormValuesTypes } from '@/types';
+import { eventFormSchema, eventFormValuesTypes } from '@/types';
 import { z } from 'zod';
-import bcrypt from 'bcrypt';
 
 export async function POST(req: NextRequest) {
   try {
@@ -18,24 +17,22 @@ export async function POST(req: NextRequest) {
 
     // Parse and validate the request body
     const body = await req.json();
-    const data: UserFormValuesTypes = userFormSchema.parse(body);
-
-    // Hash the password using bcrypt
-    const hashedPassword = await bcrypt.hash(data.password as string, 10);
+    const data: eventFormValuesTypes = eventFormSchema.parse(body);
 
     // Create the user in the database
-    await prisma.penggunaDashboard.create({
+    await prisma.kegiatan.create({
       data: {
-        email: data.email,
-        password: hashedPassword, // Ideally, hash the password before storing it
-        peran: data.role,
-        nama: data.name
+        judul: data.judul,
+        deskripsi: data.deskripsi,
+        id_jadwal: parseInt(data.id_jadwal),
+        id_pengguna: parseInt(data.id_pengguna),
+        id_lokasi: parseInt(data.id_lokasi)
       }
     });
 
     // Send a success response
     return NextResponse.json(
-      { message: 'Create user successfully' },
+      { message: 'Create kegiatan successfully' },
       { status: 200 }
     );
   } catch (error: any) {

@@ -3,13 +3,26 @@ import { Button } from '@/components/ui/button';
 import { DataTable } from '@/components/ui/data-table';
 import { Heading } from '@/components/ui/heading';
 import { Separator } from '@/components/ui/separator';
-import { kegiatan } from '@prisma/client';
 import { Plus } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { columns } from './columns';
+interface FormattedEvent {
+  id: number;
+  judul: string;
+  deskripsi: string | null;
+  jadwalMulai: string;
+  jadwalSelesai: string;
+  namaJadwal: string;
+  namaPengelola: string;
+  namaLokasi: string;
+  id_jadwal: number;
+  id_lokasi: number;
+  id_pengguna: number;
+  id_qrcode: number | undefined;
+}
 
 interface EventProps {
-  data: kegiatan[];
+  data: FormattedEvent[];
 }
 
 export const EventClient: React.FC<EventProps> = ({ data }) => {

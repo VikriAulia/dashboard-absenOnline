@@ -22,10 +22,15 @@ export async function PATCH(
     const parsedData = userFormSchema.parse(body);
 
     // Conditionally hash the password if it's provided
-    let updateData: any = {
+    let updateData: {
+      email: string;
+      peran: 'ADMIN' | 'GURU';
+      nama: string;
+      password?: string;
+    } = {
       email: parsedData.email,
-      role: parsedData.role,
-      name: parsedData.name
+      peran: parsedData.role,
+      nama: parsedData.name
     };
 
     if (parsedData.password) {
@@ -34,7 +39,7 @@ export async function PATCH(
     }
 
     // Perform the update operation
-    await prisma.dashboardUser.update({
+    await prisma.penggunaDashboard.update({
       where: { id: userId },
       data: updateData
     });
